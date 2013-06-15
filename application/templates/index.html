@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{%- set active_page = g.active_page|default("index") -%}
+{% block content %}
+    <p>Something like {{active_page}}!</p>
+{% endblock %}

@@ -1,0 +1,183 @@
+/* Partially cribbed from http://matthewjamestaylor.com/blog/perfect-2-column-left-menu.htm */
+
+body {
+    border:0;
+    margin:0;
+    padding: 0;
+    width: 100%;
+
+    min-width:600px; /* Minimum width of layout - remove line if not required */
+    /* Note: The min-width property does not work in old versions of Internet Explorer */
+
+    background-color: #ddd;
+    color: #111;
+
+    font-family: 'PT Sans Caption', sans-serif;
+}
+
+/* reminder: a:link -> a:visited -> a:hover -> a:active << must always be in this order! */
+/* note: by default, <a href=""> elements (hyperlinks) are bold, blue, and
+    underline only on hover. */
+a:link {
+    font-weight: bold;
+    text-decoration: none;
+    color: #00f;
+}
+
+a:visited {
+    font-weight: bold;
+    text-decoration: none;
+    color: #408;
+}
+
+a:hover {
+    color: #00f;
+    text-decoration: underline;
+}
+
+a:active {
+    color: #f00;
+}
+
+a.redlink {
+    color: #f00;
+}
+
+h1#top {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+#header, #footer {
+    clear:both;
+    float:left;
+    width:100%;
+    background-color: #ddd;
+}
+#header {
+    padding: 10px 0px;
+    border-bottom:1px solid #000;
+}
+#footer {
+    border-top:1px solid #000;
+}
+#header p,
+#header h1,
+#header h2 {
+    padding:0px 15px 0 15px;
+    margin: 0px;
+    border: 0px;
+}
+
+/* column container */
+#column-mask {
+    position:relative;  /* This fixes the IE7 overflow hidden bug */
+    clear:both;
+    float:left;
+    width:100%;         /* width of whole page */
+    overflow:hidden;        /* This chops off any overhanging divs */
+}
+
+#column-wrapper {
+    float:left;
+    width:100%;
+    position:relative;
+}
+
+#content,
+#sidebar {
+    float:left;
+    position:relative;
+    padding:0 0 1em 0;
+}
+
+#column-mask {
+    background:#fff;        /* right column background colour */
+}
+#column-mask #column-wrapper {
+    right:75%;          /* right column width */
+    background:#ddd;    /* left column background colour */
+    border-right: 1px solid #000;
+}
+#column-mask #content {
+    width:71%;          /* right column content width */
+    left:102%;          /* 100% plus left column left padding */
+    overflow:auto;
+}
+#column-mask #sidebar {
+    width:21%;          /* left column content width (column width minus left and right padding) */
+    left:6%;            /* (right column left and right padding) plus (left column left padding) */
+}
+
+#sidebar {
+    padding-top: 1em;
+}
+#sidebar ul {
+    list-style-type: none;
+}
+#sidebar p {
+    border-bottom: 1px solid #888;
+}
+
+#footer {
+    text-align: right;
+    font-size: 75%;
+}
+
+.error {
+    color: #d00;
+}
+
+#editpage input {
+    width: 50%;
+}
+
+#editpage textarea {
+    width: 90%;
+    height: 40em;
+}
+
+#editpage .button {
+    width: 20%;
+}
+
+#previewbox {
+    position: relative;
+    width: 96%;
+    left: 1%;
+    padding: 10px;
+    border: 1px dashed #008;
+    margin-bottom: 1em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    border-bottom: 1px solid #bbb;
+}
+
+blockquote {
+    padding: 4px 8px;
+    margin: 4px 20px;
+    border: 1px dashed #f8b;
+    border-left: 3px solid #f8b;
+}
+
+#mailform input[type=text], #mailform textarea {
+    width: 98%;
+}
+#mailform textarea {
+    height: 20em;
+}
+
+.article-signature {
+    font-size: 90%;
+    text-align: right;
+    border-top: 1px solid #bbb;
+}
+
+.autohide {
+    display: none;
+}
+
+li:hover .autohide {
+    display: inline;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{%- set navbar = [
+    ('index', url_for('index'), "Home")
+] -%}
+<html>
+<head>
+    <title>{{ '%s - ' % page_title if page_title }}Narc Dot Ro</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='page-style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='persona-buttons.css') }}">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=PT+Sans+Caption">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://login.persona.org/include.js"></script>
+    <script type="text/javascript">
+        var currentUser = {{ session.current_user|tojson|safe if session.current_user else 'null' }};
+        var csrf_token = {{ session.csrf_token|tojson|safe if session.csrf_token else 'null' }};
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='persona-integration.js') }}"></script>
+</head>
+<body>
+    <div id="header">
+        <h1 id="top">
+            {%- if active_page == 'index' -%}
+                Narc Dot Ro
+            {%- else -%}
+                <a href="{{ url_for('index') }}">Narc Dot Ro</a>
+            {%- endif -%}
+        </h1>
+    </div>
+    <div id="column-mask">
+        <div id="column-wrapper">
+            <div id="content">
+                <h2 id="title">{{ page_title if page_title else 'Nothing' }}</h2>
+                {% block content -%}
+                    <p>This is an empty page.</p>
+                {%- endblock %}
+            </div> <!-- id="content" -->
+            <div id="sidebar">
+                <p>Navigation</p>
+                <ul>
+                {% for page, url, title in navbar %}
+                    <li>{% if page != active_page %}<a href="{{ url }}">{{ title }}</a>{% else %}<b>{{ title }}</b>{% endif %}</li>
+                {% endfor %}
+                </ul>
+
+                <p>Related sites</p>
+                <ul>
+                    <li><a href="http://wiki.narc.ro/">NarcWiki</a></li>
+                </ul>
+
+                <p>Internal stuff</p>
+                <ul>
+                    <li>{% if session.current_user %}<b>Logout</b>{% else %}<b>Login</b>{% endif %}</li>
+                    <li>{% if active_page != 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% else %}<b>Admin</b>{% endif %}</li>
+                </ul>
+            </div><!-- id="sidebar" -->
+        </div> <!-- id="column-wrapper" -->
+    </div> <!-- id="column-mask" -->
+    <div id="footer">
+        <p>In completely unrelated news, it took {{ page_timer }} ms to display this page (more or less).</p>
+    </div>
+</body>
+</html>
