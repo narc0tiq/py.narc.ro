@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{%- set active_page = article.slug -%}
+{% block content %}
+    <h2 id="title">{{article.title}}</h2>
+    <p>{{article.content}}</p>
+{% endblock %}
