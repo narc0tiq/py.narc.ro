@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{%- set active_page = g.active_page|default("login") -%}
+{% block content %}
+<div style="text-align: center">
+	<p>I'm sorry, what you're trying to do is forbidden by security policy.</p>
+
+	<img src="{{ url_for('static', filename='img/padlock.png') }}" style="height: 300px" />
+
+	<p>Please check whether you are logged in and should have permission for this action, 
+	and contact the administrator if you feel a mistake has been made.</p>
+</div>
+{% endblock %}

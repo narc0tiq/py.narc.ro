@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
-{%- set active_page = article.slug -%}
+{%- set active_page = article.slug if article.slug else g.active_page -%}
+{%- set page_title = article.title -%}
 {% block content %}
-    <h2 id="title">{{article.title}}</h2>
-    <p>{{article.content}}</p>
+    {% if article -%}
+        <h2 id="title">{{article.title}}</h2>
+        {{article.content|markdown(fenced_code=True, html=True, strikethrough=True,
+                               superscript=True, tables=True, toc=True, xhtml=False,
+                               intra_emphasis=False)}}
+    {%- else -%}
+        <h2 id="title">Whoops, nothing here!</h2>
+        <p>Sorry, there doesn't seem to be anything here. Did I mis-link something? Please <a href="{{url_for('contact')}}">tell me</a>.</p>
+    {%- endif %}
 {% endblock %}

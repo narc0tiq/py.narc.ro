@@ -1,5 +1,14 @@
 {% extends "layout.html" %}
 {%- set active_page = g.active_page|default("admin") -%}
+{%- set page_title = "Admin" -%}
 {% block content %}
-    <p>Something like {{active_page}}!</p>
+    <h2>Articles</h2>
+    <ul>
+    {% for article in articles %}
+        <li>
+            <a href="{{ url_for('edit_article', slug=article.slug) }}">[{{article.title}}]</a><!-- whitespace, nom nom
+            --><a href="{{ url_for('article', slug=article.slug) }}">({{article.slug}})</a></li>
+    {% endfor %}
+    </ul>
+    <p><a href="{{ url_for('new_article')}}">New article</a></p>
 {% endblock %}

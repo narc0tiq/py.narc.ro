@@ -3,16 +3,13 @@
 <head>
     <title>{{ '%s - ' % page_title if page_title }}Narc Dot Ro</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='page-style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='persona-buttons.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/page-style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/persona-buttons.css') }}">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=PT+Sans+Caption">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://login.persona.org/include.js"></script>
-    <script type="text/javascript">
-        var currentUser = {{ session.current_user|tojson if session.current_user else 'null' }};
-        var csrf_token = {{ session.csrf_token|tojson if session.csrf_token else 'null' }};
-    </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='persona-integration.js') }}"></script>
+    <script type="text/javascript">{{auth_script|safe}}</script>
+    <meta name="active-page" value="{{active_page}}">
 </head>
 <body>
     <div id="header">
@@ -20,7 +17,7 @@
             {%- if active_page == 'index' -%}
                 Narc Dot Ro
             {%- else -%}
-                <a href="{{ url_for('index') }}">Narc Dot Ro</a>
+                <a href="{{ url_for('article') }}">Narc Dot Ro</a>
             {%- endif -%}
         </h1>
     </div>
@@ -32,25 +29,32 @@
                 {%- endblock %}
             </div> <!-- id="content" -->
             <div id="sidebar">
-                {% for section, items in g.navbar %}
-                    <p>{{section}}</p>
+                {% for cat in g.navbar %}
+                    <p>{{cat.name}}</p>
                     <ul>
-                    {% for i in items %}
-                        <li>{% if active_page != i.page_name %}<a href="{{ i.url }}">{{ i.title }}</a>{% else %}<b>{{ i.title }}</b>{% endif %}</li>
-                    {% endfor %}
+                        {% for i in cat.links -%}
+                            <li>{% if active_page != i.page %}<a href="{{ i.url }}">{{ i.label }}</a>{% else %}<b>{{ i.label }}</b>{% endif %}</li>
+                        {% endfor %}
                     </ul>
                 {% endfor %}
 
                 <p>Internal Stuff</p>
                 <ul>
-                    <li>{% if session.current_user %}<b>Logout</b>{% else %}<b>Login</b>{% endif %}</li>
-                    <li>{% if active_page != 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% else %}<b>Admin</b>{% endif %}</li>
+                    {%- if current_user.is_authenticated() -%}
+                        <li>{% if active_page != 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% else %}<b>Admin</b>{% endif %}</li>
+                        <li><b>{{current_user.email}}</b></li>
+                        <li><a class="persona-button dark" id="browserid-logout"><span>Logout</span></a></li>
+                    {%- else -%}
+                        <li><a class="persona-button dark" id="browserid-login"><span>Login</span></a></li>
+                    {%- endif -%}
                 </ul>
             </div><!-- id="sidebar" -->
         </div> <!-- id="column-wrapper" -->
     </div> <!-- id="column-mask" -->
     <div id="footer">
-        <p>In completely unrelated news, it took {{ page_timer }} ms to display this page (more or less).</p>
+        {%- if g.start_time %}
+            <p>In completely unrelated news, it took {{ (g.datetime.utcnow() - g.start_time).total_seconds() * 1000 }} ms to display this page (more or less).</p>
+        {%- endif %}
     </div>
 </body>
 </html>
