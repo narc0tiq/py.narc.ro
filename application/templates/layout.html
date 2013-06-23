@@ -1,3 +1,6 @@
+{%- macro link_or_bold(page, url, label) %}
+    {% if active_page == page %}<b>{{label}}</b>{% else %}<a href="{{url}}">{{label}}</a>{% endif %}
+{% endmacro -%}
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +36,7 @@
                     <p>{{cat.name}}</p>
                     <ul>
                         {% for i in cat.links -%}
-                            <li>{% if active_page != i.page %}<a href="{{ i.url }}">{{ i.label }}</a>{% else %}<b>{{ i.label }}</b>{% endif %}</li>
+                            <li>{{link_or_bold(i.page, i.url, i.label) }}</li>
                         {% endfor %}
                     </ul>
                 {% endfor %}
@@ -41,9 +44,14 @@
                 <p>Internal Stuff</p>
                 <ul>
                     {%- if current_user.is_authenticated() -%}
-                        <li>{% if active_page != 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% else %}<b>Admin</b>{% endif %}</li>
                         <li><b>{{current_user.email}}</b></li>
                         <li><a class="persona-button dark" id="browserid-logout"><span>Logout</span></a></li>
+                        <li>{{link_or_bold('admin', url_for('admin'), "Edit articles") }}</li>
+                        <li>{{link_or_bold('admin/sidebar', url_for('edit_sidebar'), "Edit the sidebar") }}</li>
+                        {%- if current_user.email == config.WEBMASTER_EMAIL and article -%}
+                            <li>{{link_or_bold('admin/edit', url_for('edit_article', slug=article.slug), "Edit this article") }}</li>
+                            <li><a href="{{url_for('drop_article', slug=article.slug) }}" class="redlink">Delete this article</a></li>
+                        {%- endif -%}
                     {%- else -%}
                         <li><a class="persona-button dark" id="browserid-login"><span>Login</span></a></li>
                     {%- endif -%}

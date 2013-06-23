@@ -43,10 +43,6 @@ def article(slug):
         abort(404)
     return render_template('article.html', article=article)
 
-@app.route('/contact')
-def contact():
-    return 'Sorry, not working yet'
-
 @app.route('/admin/')
 @login_required
 def admin():
@@ -106,3 +102,44 @@ def drop_article(slug):
     else:
         return render_template('confirm.html', action=url_for('drop_article', slug=slug),
                                query='delete the article titled "%s"' % article.title)
+
+@app.route('/admin/sidebar', methods=['GET', 'POST'])
+@login_required
+def edit_sidebar():
+    if request.method == 'POST' and 'action' in request.form:
+        if request.form['action'] == 'new_link':
+            link = models.SidebarLink(request.form['url'], request.form['label'], request.form['page'] if 'page' in request.form else None)
+            cat = models.Sidebar.query.get(int(request.form['parent']))
+            cat.links.append(link)
+            g.db.session.add(link)
+        elif request.form['action'] == 'edit_link':
+            link = models.SidebarLink.query.get(request.form['id'])
+            link.url = request.form['url']
+            link.label = request.form['label']
+            link.page = request.form['page'] if 'page' in request.form else None
+        elif request.form['action'] == 'drop_link':
+            link = models.SidebarLink.query.get(request.form['id'])
+            g.db.session.delete(link)
+        elif request.form['action'] == 'new_category':
+            cat = models.Sidebar(request.form['name'])
+            g.db.session.add(cat)
+        elif request.form['action'] == 'edit_category':
+            cat = models.Sidebar.query.get(request.form['id'])
+            cat.name = request.form['name']
+        elif request.form['action'] == 'drop_category':
+            cat = models.Sidebar.query.get(request.form['id'])
+            for link in cat.links:
+                g.db.session.delete(link)
+            g.db.session.delete(cat)
+        g.db.session.commit()
+        g.navbar = models.Sidebar.query.all()
+
+    return render_template('edit_sidebar.html')
+
+@app.route('/contact')
+def contact():
+    abort(404)
+
+@app.route('/download/<path:file>')
+def download(file):
+    abort(404)

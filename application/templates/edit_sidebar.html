@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{%- set active_page = g.active_page|default("admin/sidebar") -%}
+{%- set page_title="Edit the sidebar" -%}
+{%- macro edit_category(cat) %}
+    <form method="post" style="display: inline">
+        <input type="hidden" name="action" value="edit_category">
+        <input type="hidden" name="id" value="{{cat.id}}">
+        <input type="text" name="name" value="{{cat.name}}">
+        <input type="submit" value="Update">
+    </form>
+    <form method="post" style="display: inline">
+        <input type="hidden" name="action" value="drop_category">
+        <input type="hidden" name="id" value="{{cat.id}}">
+        <input type="submit" value="Delete">
+    </form>
+{% endmacro -%}
+{%- macro edit_link(link) %}
+    <form method="post" style="display: inline">
+        <input type="hidden" name="action" value="edit_link">
+        <input type="hidden" name="id" value="{{link.id}}">
+        <input type="text" name="url" value="{{link.url}}">
+        <input type="text" name="label" value="{{link.label}}">
+        <input type="text" name="page" value="{{link.page if link.page}}">
+        <input type="submit" value="Update">
+    </form>
+    <form method="post" style="display: inline">
+        <input type="hidden" name="action" value="drop_link">
+        <input type="hidden" name="id" value="{{link.id}}">
+        <input type="submit" value="Delete">
+    </form>
+{% endmacro -%}
+{% block content %}
+    <h2>Edit the sidebar</h2>
+    {% for cat in g.navbar %}
+        {{edit_category(cat)}}
+        <ul>
+            {% for i in cat.links -%}
+                <li>{{edit_link(i)}}</li>
+            {% endfor %}
+            <form method="post">
+                <input type="hidden" name="action" value="new_link">
+                <input type="hidden" name="parent" value="{{cat.id}}">
+                <input type="text" name="url"> <input type="text" name="label"> <input type="text" name="page">
+                <input type="submit" value="Add">
+            </form>
+        </ul>
+    {% endfor %}
+    <form method="post">
+        <input type="hidden" name="action" value="new_category">
+        <input type="text" name="name"> <input type="submit" value="Add">
+    </form>
+{% endblock %}
