@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
-{%- set active_page = g.active_page|default("login") -%}
+{%- set active_page = "403" -%}
+{%- set page_title = "403 Unauthorized" -%}
 {% block content %}
+<h2>403 -- you can't do that!</h2>
 <div style="text-align: center">
 	<p>I'm sorry, what you're trying to do is forbidden by security policy.</p>
 

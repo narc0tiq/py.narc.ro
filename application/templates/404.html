@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{%- set active_page = "404" -%}
+{%- set page_title = "404 Not Found" -%}
+{% block content %}
+<h2>404 -- it doesn't seem to exist!</h2>
+<div style="text-align: center">
+    <p>I'm sorry, I just can't seem to find what you're looking for here. Maybe it got deleted,
+    maybe it just didn't make the transition to Linode, maybe I'm just having a bad day.</p>
+
+    <p>Have a cute tumbeast <a href="http://theoatmeal.com/comics/state_web_summer#tumblr">courtesy
+    of The Oatmeal</a> to make up for it:</p> 
+
+	<img src="{{ url_for('static', filename='img/tb_sign1.png') }}" style="height: 400px" />
+</div>
+{% endblock %}

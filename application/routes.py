@@ -4,7 +4,7 @@ from datetime import datetime
 
 from flask import request, session, g, redirect, url_for, abort, \
         render_template, flash
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user
 
 from application import app, models, login_manager
 
@@ -22,15 +22,25 @@ def start_timer():
 def setup_navigation():
     g.navbar = models.Sidebar.query.all()
 
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('403.html')
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html')
+
 @login_manager.unauthorized_handler
 def please_login():
-    return render_template('login.html')
+    abort(403)
 
 @app.route('/', defaults={'slug': 'index'})
 @app.route('/<path:slug>')
 def article(slug):
     g.active_page = slug
     article = models.Article.query.get(slug)
+    if not article:
+        abort(404)
     return render_template('article.html', article=article)
 
 @app.route('/contact')
@@ -46,6 +56,9 @@ def admin():
 @app.route('/admin/new', methods=['GET', 'POST'])
 @login_required
 def add_article():
+    if current_user.email != app.config['WEBMASTER_EMAIL']:
+        abort(403)
+
     if request.method == 'POST':
         article = models.Article(request.form['title'], request.form['content'], request.form['slug'])
         if 'preview' in request.form:
@@ -61,6 +74,9 @@ def add_article():
 @app.route('/admin/edit/<path:slug>', methods=['GET', 'POST'])
 @login_required
 def edit_article(slug):
+    if current_user.email != app.config['WEBMASTER_EMAIL']:
+        abort(403)
+
     article = models.Article.query.get(slug)
     if request.method == 'POST':
         article.slug = request.form['slug']
@@ -78,6 +94,9 @@ def edit_article(slug):
 @app.route('/admin/drop/<path:slug>', methods=['GET', 'POST'])
 @login_required
 def drop_article(slug):
+    if current_user.email != app.config['WEBMASTER_EMAIL']:
+        abort(403)
+
     article = models.Article.query.get(slug)
     if request.method == 'POST':
         if 'confirm' in request.form:
