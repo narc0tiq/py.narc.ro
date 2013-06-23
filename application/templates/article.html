@@ -4,9 +4,7 @@
 {% block content %}
     {% if article -%}
         <h2 id="title">{{article.title}}</h2>
-        {{article.content|markdown(fenced_code=True, html=True, strikethrough=True,
-                               superscript=True, tables=True, toc=True, xhtml=False,
-                               intra_emphasis=False)}}
+        {{article.content|markdown}}
     {%- else -%}
         <h2 id="title">Whoops, nothing here!</h2>
         <p>Sorry, there doesn't seem to be anything here. Did I mis-link something? Please <a href="{{url_for('contact')}}">tell me</a>.</p>

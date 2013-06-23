@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{%- set active_page = g.active_page|default("admin/edit") -%}
+{% block content %}
+    {%- if preview %}
+        <div id="previewbox">
+            <h2>{{ article.title }}</h2>
+            {{article.content|markdown}}
+        </div><!-- id="previewbox" -->
+    {%- endif %}
+    <form method="post" action="{{action}}">
+    <dl id="editpage">
+        <dt>Title:
+        <dd><input type="text" name="title" value="{{article.title if article}}">
+        <dt>Slug (if empty, one will be provided):
+        <dd>{{url_for('article', _external=True)}}<input type="text" name="slug" value="{{article.slug if article}}">
+        <dt>Content:
+        <dd><textarea name="content" rows="5" cols="40">{{article.content if article}}</textarea>
+        <dd><input class="button" type="submit" name="submit" accesskey="s"> <input class="button" type="submit" name="preview" value="Preview" accesskey="p">
+    </dl>
+    </form>
+{% endblock %}

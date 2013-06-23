@@ -43,21 +43,47 @@ def admin():
     articles = models.Article.query.all()
     return render_template('admin.html', articles=articles)
 
-@app.route('/admin/new', methods=['GET'])
-@login_required
-def new_article():
-    return render_template('new_article_form.html')
-
-@app.route('/admin/new', methods=['POST'])
+@app.route('/admin/new', methods=['GET', 'POST'])
 @login_required
 def add_article():
-    article = models.Article(request.form['title'], request.form['content'], request.form['slug'])
-    g.db.session.add(article)
-    g.db.session.commit()
-    flash('New article has been recorded.')
-    return redirect(url_for('article', slug=article.slug) or url_for('list'))
+    if request.method == 'POST':
+        article = models.Article(request.form['title'], request.form['content'], request.form['slug'])
+        if 'preview' in request.form:
+            return render_template('article_form.html', action=url_for('add_article'), preview=True, article=article)
+        else:
+            g.db.session.add(article)
+            g.db.session.commit()
+            flash('New article has been recorded.')
+            return redirect(url_for('article', slug=article.slug) or url_for('list'))
+    else:
+        return render_template('article_form.html', action=url_for('add_article'))
 
-@app.route('/admin/edit/<path:slug>')
+@app.route('/admin/edit/<path:slug>', methods=['GET', 'POST'])
 @login_required
 def edit_article(slug):
-    return 'Sorry, not working yet'
+    article = models.Article.query.get(slug)
+    if request.method == 'POST':
+        article.slug = request.form['slug']
+        article.title = request.form['title']
+        article.content = request.form['content']
+        if 'preview' in request.form:
+            return render_template('article_form.html', article=article, preview=True, action=url_for('edit_article', slug=slug))
+        else:
+            g.db.session.commit()
+            flash('Article edited.')
+            return redirect(url_for('article', slug=article.slug))
+    else:
+        return render_template('article_form.html', article=article, action=url_for('edit_article', slug=slug))
+
+@app.route('/admin/drop/<path:slug>', methods=['GET', 'POST'])
+@login_required
+def drop_article(slug):
+    article = models.Article.query.get(slug)
+    if request.method == 'POST':
+        if 'confirm' in request.form:
+            g.db.session.delete(article)
+            g.db.session.commit()
+        return redirect(url_for('admin'))
+    else:
+        return render_template('confirm.html', action=url_for('drop_article', slug=slug),
+                               query='delete the article titled "%s"' % article.title)

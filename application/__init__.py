@@ -20,7 +20,8 @@ browser_id = BrowserID()
 browser_id.user_loader(models.get_user_from_browserid)
 browser_id.init_app(app)
 
-Misaka(app)
+Misaka(app, fenced_code=True, html=True, strikethrough=True, superscript=True,
+       tables=True, toc=True, xhtml=False, intra_emphasis=False)
 
 import application.hooks
 import application.routes

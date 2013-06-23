@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{%- set active_page = g.active_page|default("confirm") -%}
+{%- set page_title="Confirm" -%}
+{% block content %}
+    <h2>Confirm</h2>
+    <div style="text-align: center">
+        <p>Really {{query}}?</p>
+        <form method="post" action="{{action}}">
+            <p><input type="submit" name="confirm" value="Yes" accesskey="y"> <input type="submit" value="No" accesskey="n"></p>
+        </form>
+    </div>
+{% endblock %}
