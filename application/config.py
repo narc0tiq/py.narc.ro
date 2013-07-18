@@ -4,6 +4,8 @@
 SQLALCHEMY_DATABASE_URI = 'sqlite:///.narc.ro.sqlite3.db'
 SQLALCHEMY_ECHO = False
 
+LISTEN_INTERFACE = '127.0.0.1'
+
 DEBUG = True
 DEBUG_INTERACTIVE = False
 SECRET_KEY = 'Developer Secret (not so secret)'
