@@ -7,6 +7,7 @@ from application import config, models
 
 app = Flask(__name__)
 app.config.from_object(config)
+app.config.from_pyfile('../config.py', silent=True)
 app.config.from_envvar('NARCRO_CONFIG', silent=True)
 
 models.bind(app)

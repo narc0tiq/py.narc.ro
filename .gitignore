@@ -4,3 +4,7 @@
 *.pyc
 
 venv/
+
+# Local config, distinct from the application config in application/
+config.py
+!application/config.py
