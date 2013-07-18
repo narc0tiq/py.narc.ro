@@ -1,3 +1,6 @@
+import sys
+sys.path.append('.')
+
 from application import app
 
 app.run(host=app.config['LISTEN_INTERFACE'],
