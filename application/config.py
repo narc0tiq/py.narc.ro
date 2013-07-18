@@ -4,7 +4,6 @@
 SQLALCHEMY_DATABASE_URI = 'sqlite:///.narc.ro.sqlite3.db'
 SQLALCHEMY_ECHO = False
 
-SERVER_NAME = 'flask.narc.ro'
 DEBUG = True
 DEBUG_INTERACTIVE = False
 SECRET_KEY = 'Developer Secret (not so secret)'
