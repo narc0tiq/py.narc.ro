@@ -106,6 +106,9 @@ def drop_article(slug):
 @app.route('/admin/sidebar', methods=['GET', 'POST'])
 @login_required
 def edit_sidebar():
+    if current_user.email != app.config['WEBMASTER_EMAIL']:
+        abort(403)
+
     if request.method == 'POST' and 'action' in request.form:
         if request.form['action'] == 'new_link':
             link = models.SidebarLink(request.form['url'], request.form['label'], request.form['page'] if 'page' in request.form else None)
