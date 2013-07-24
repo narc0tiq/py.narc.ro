@@ -1,6 +1,5 @@
 from __future__ import unicode_literals, absolute_import
 from collections import OrderedDict, namedtuple
-from datetime import datetime
 
 from flask import request, session, g, redirect, url_for, abort, \
         render_template, flash
@@ -14,14 +13,6 @@ LocalNav = lambda page, title: NavbarItem(page, url_for(page), title)
 ArticleNav = lambda article, title: NavbarItem(article, url_for('article', slug=article), title)
 RemoteNav = lambda url, title: NavbarItem(None, url, title)
 
-@app.before_request
-def start_timer():
-    g.start_time = datetime.utcnow()
-    g.datetime = datetime
-
-@app.before_request
-def setup_navigation():
-    g.navbar = models.Sidebar.query.all()
 
 @app.errorhandler(403)
 def forbidden(e):
