@@ -7,6 +7,7 @@ from flask import request, session, g, redirect, url_for, abort, \
 from flask.ext.login import login_required, current_user
 
 from application import app, models, login_manager
+from application.decorators import only_admin
 
 NavbarItem = namedtuple('NavbarItem', ['page_name', 'url', 'title'])
 LocalNav = lambda page, title: NavbarItem(page, url_for(page), title)
@@ -51,10 +52,8 @@ def admin():
 
 @app.route('/admin/new', methods=['GET', 'POST'])
 @login_required
+@only_admin
 def add_article():
-    if current_user.email != app.config['WEBMASTER_EMAIL']:
-        abort(403)
-
     if request.method == 'POST':
         article = models.Article(request.form['title'], request.form['content'], request.form['slug'])
         if 'preview' in request.form:
@@ -69,10 +68,8 @@ def add_article():
 
 @app.route('/admin/edit/<path:slug>', methods=['GET', 'POST'])
 @login_required
+@only_admin
 def edit_article(slug):
-    if current_user.email != app.config['WEBMASTER_EMAIL']:
-        abort(403)
-
     article = models.Article.query.get(slug)
     if request.method == 'POST':
         article.slug = request.form['slug']
@@ -89,10 +86,8 @@ def edit_article(slug):
 
 @app.route('/admin/drop/<path:slug>', methods=['GET', 'POST'])
 @login_required
+@only_admin
 def drop_article(slug):
-    if current_user.email != app.config['WEBMASTER_EMAIL']:
-        abort(403)
-
     article = models.Article.query.get(slug)
     if request.method == 'POST':
         if 'confirm' in request.form:
@@ -105,10 +100,8 @@ def drop_article(slug):
 
 @app.route('/admin/sidebar', methods=['GET', 'POST'])
 @login_required
+@only_admin
 def edit_sidebar():
-    if current_user.email != app.config['WEBMASTER_EMAIL']:
-        abort(403)
-
     if request.method == 'POST' and 'action' in request.form:
         if request.form['action'] == 'new_link':
             link = models.SidebarLink(request.form['url'], request.form['label'], request.form['page'] if 'page' in request.form else None)
