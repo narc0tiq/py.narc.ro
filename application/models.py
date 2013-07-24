@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 from application.decorators import permalink
 
@@ -98,6 +99,26 @@ class SidebarLink(db.Model):
 
     def __repr__(self):
         return '<SidebarLink %r>' % self.label
+
+
+class DownloadHit(db.Model):
+    path = db.Column(db.String(255), primary_key=True)
+    first_hit = db.Column(db.DateTime)
+    last_hit = db.Column(db.DateTime)
+    hit_count = db.Column(db.Integer)
+
+    def __init__(self, path):
+        self.path = path
+        self.first_hit = datetime.now()
+        self.last_hit = datetime.now()
+        self.hit_count = 0
+
+    def record(self):
+        self.hit_count += 1
+        self.last_hit = datetime.now()
+
+    def __repr__(self):
+        return '<DownloadHit %r, %r hits between %r - %r>' % (self.path, self.hit_count, self.first_hit, self.last_hit)
 
 
 def bind(app):

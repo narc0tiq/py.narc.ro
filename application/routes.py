@@ -3,7 +3,7 @@ from collections import OrderedDict, namedtuple
 from functools import wraps
 
 from flask import request, session, g, redirect, url_for, abort, \
-        render_template, flash
+        render_template, flash, Response
 from flask.ext.login import login_required, current_user
 
 from application import app, models, login_manager
@@ -46,7 +46,8 @@ def article(slug):
 @login_required
 def admin():
     articles = models.Article.query.all()
-    return render_template('admin.html', articles=articles)
+    downloads = models.DownloadHit.query.all()
+    return render_template('admin.html', articles=articles, downloads=downloads)
 
 @app.route('/admin/new', methods=['GET', 'POST'])
 @login_required
@@ -134,6 +135,29 @@ def edit_sidebar():
 def contact():
     abort(404)
 
-@app.route('/download/<path:file>')
-def download(file):
-    abort(404)
+@app.route('/download/<path:fname>')
+def download(fname):
+    recorder = models.DownloadHit.query.get(fname)
+    if recorder is None:
+        recorder = models.DownloadHit(fname)
+        g.db.session.add(recorder)
+    recorder.record()
+    g.db.session.commit()
+    # TODO: Redirect to configured static path of the download.
+    return Response('Recorded hit on %s' % fname, mimetype='text/plain')
+
+@app.route('/admin/forget/<path:fname>', methods=['GET', 'POST'])
+@login_required
+@only_admin
+def forget_download(fname):
+    hit = models.DownloadHit.query.get(fname)
+    if hit is None:
+        return redirect(url_for('admin'))
+    elif request.method == 'POST':
+        if 'confirm' in request.form:
+            g.db.session.delete(hit)
+            g.db.session.commit()
+        return redirect(url_for('admin'))
+    else:
+        return render_template('confirm.html', action=url_for('forget_download', fname=fname),
+                               query='forget the download count for "%s"' % fname)
