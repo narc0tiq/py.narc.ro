@@ -49,6 +49,41 @@ exercise to the reader, but rest assured it has been tested and  works just
 fine.
 
 
+## Installing ##
+
+Before you can do much with a fresh new copy of py.narc.ro, you need to have it
+create its database. The simplest way to do this is, while in the py.narc.ro
+directory:
+
+```
+$ python
+>>> from application import app, db
+>>> with app.test_request_context():
+...   db.create_all()
+...
+>>> exit()
+```
+
+This should create all of the tables and allow the application to run
+successfully (albeit with no content whatsoever). From here, you'll probably
+want to add a `config.py` with your email set as the webmaster address:
+
+```
+$ echo "WEBMASTER_EMAIL = 'you@example.org'" >> config.py
+```
+
+You may also want to look at the interesting settings in `application/config.py`,
+and override anything you don't particularly like (don't edit the default
+config, add overridden values to `config.py` instead). As an example, here's
+what I'm using on one of my dev environments:
+
+```
+(venv)[narc@somewhere ~/src/py.narc.ro]% cat config.py
+DEBUG_INTERACTIVE = True
+LISTEN_INTERFACE = '0.0.0.0'
+```
+
+
 ## Running the code ##
 
 If you have python, flask and sqlalchemy installed and available (virtualenv is
