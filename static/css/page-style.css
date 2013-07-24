@@ -157,10 +157,10 @@ blockquote {
     border-left: 3px solid #f8b;
 }
 
-#mailform input[type=text], #mailform textarea {
+#mail-form input[type=text], #mail-form textarea {
     width: 98%;
 }
-#mailform textarea {
+#mail-form textarea {
     height: 20em;
 }
 

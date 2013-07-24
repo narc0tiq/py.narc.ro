@@ -131,9 +131,12 @@ def edit_sidebar():
 
     return render_template('edit_sidebar.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    abort(404)
+    if request.method == 'POST':
+        return "Actually, this part isn't working yet. Sorry!"
+    article = models.Article.query.get('contact')
+    return render_template('contact_form.html', article=article)
 
 @app.route('/download/<path:fname>')
 def download(fname):

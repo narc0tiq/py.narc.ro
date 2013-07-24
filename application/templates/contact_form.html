@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{%- set active_page = g.active_page|default("contact") -%}
+{%- set page_title = article.title if article else "Contact me" -%}
+{% block content %}
+    <h2 id="title">{{page_title}}</h2>
+    {{article.content|markdown if article}}
+    <form method="post" id="mail-form">
+        <p><label for="return-addr">If you want me to email you back, type in your address here (optional):</label><br/>
+        <input type="text" name="return-addr" value="" /></p>
+
+        <p><label for="content">Now your message:</label><br/>
+        <textarea name="content"></textarea></p>
+        <div style="text-align: center">When you're done, just hit the Submit button below, or hit Alt+S (or Alt+Shift+S in some browsers).</div>
+        <div style="text-align: center"><input type="submit" accesskey="s" name="submit" value="Send" /></div>
+    </form>
+{% endblock %}
