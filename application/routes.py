@@ -1,18 +1,25 @@
 from __future__ import unicode_literals, absolute_import
 from collections import OrderedDict, namedtuple
+from functools import wraps
 
 from flask import request, session, g, redirect, url_for, abort, \
         render_template, flash
 from flask.ext.login import login_required, current_user
 
 from application import app, models, login_manager
-from application.decorators import only_admin
 
 NavbarItem = namedtuple('NavbarItem', ['page_name', 'url', 'title'])
 LocalNav = lambda page, title: NavbarItem(page, url_for(page), title)
 ArticleNav = lambda article, title: NavbarItem(article, url_for('article', slug=article), title)
 RemoteNav = lambda url, title: NavbarItem(None, url, title)
 
+def only_admin(function):
+    @wraps(function)
+    def decorated(*args, **kwargs):
+        if current_user.email != app.config['WEBMASTER_EMAIL']:
+            abort(403)
+        return function(*args, **kwargs)
+    return decorated
 
 @app.errorhandler(403)
 def forbidden(e):

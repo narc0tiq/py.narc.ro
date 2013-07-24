@@ -1,4 +1,5 @@
 from functools import wraps
+from flask import url_for
 from werkzeug.routing import BuildError
 
 def permalink(function):
@@ -9,12 +10,4 @@ def permalink(function):
             return url_for(endpoint, **values)
         except BuildError:
             return
-    return decorated
-
-def only_admin(function):
-    @wraps(function)
-    def decorated(*args, **kwargs):
-        if current_user.email != app.config['WEBMASTER_EMAIL']:
-            abort(403)
-        return function(*args, **kwargs)
     return decorated
