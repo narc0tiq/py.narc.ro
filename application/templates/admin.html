@@ -9,7 +9,7 @@
             {% if current_user.email == config.WEBMASTER_EMAIL -%}
                 <a href="{{url_for('edit_article', slug=article.slug) }}">[{{article.title}}]</a><!-- whitespace, nom nom
                 --><a href="{{url_for('article', slug=article.slug) }}">({{article.slug}})</a>
-                <a class="redlink autohide" href="{{url_for('drop_article', slug=article.slug) }}">[X]a>
+                <a class="redlink autohide" href="{{url_for('drop_article', slug=article.slug) }}">[X]</a>
             {%- else -%}
                 <b>[{{article.title}}]</b><a href="{{url_for('article', slug=article.slug) }}">({{article.slug}})</a>
             {%- endif %}
