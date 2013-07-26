@@ -14,3 +14,4 @@ SECRET_KEY = 'Developer Secret (not so secret)'
 # Note that anyone can view the admin area, though (by design)
 WEBMASTER_EMAIL = 'webmaster@narc.ro'
 MAIL_DEFAULT_SENDER = 'blackhole@narc.ro'
+MAIL_DEFAULT_RECIPIENT = WEBMASTER_EMAIL

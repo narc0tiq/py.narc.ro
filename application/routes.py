@@ -139,7 +139,7 @@ def contact():
         if 'return-addr' in request.form:
             extra_headers['Reply-To'] = request.form['return-addr'];
         with mail.record_messages() as outbox:
-            msg = Message(recipients=[app.config['WEBMASTER_EMAIL']],
+            msg = Message(recipients=[app.config['MAIL_DEFAULT_RECIPIENT']],
                           subject="Contact form message from %s" % (app.config['SERVER_NAME'] if app.config['SERVER_NAME'] is not None else 'the website'),
                           body=request.form['content'],
                           extra_headers=extra_headers)
