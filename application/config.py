@@ -13,3 +13,4 @@ SECRET_KEY = 'Developer Secret (not so secret)'
 # The webmaster is the only person allowed to add/edit articles.
 # Note that anyone can view the admin area, though (by design)
 WEBMASTER_EMAIL = 'webmaster@narc.ro'
+MAIL_DEFAULT_SENDER = 'blackhole@narc.ro'

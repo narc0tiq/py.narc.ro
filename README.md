@@ -25,6 +25,7 @@ with it, I'm just writing the thing.
 packages installed:
 
  * flask
+ * flask-mail
  * flask-misaka
  * flask-sqlalchemy
  * flask-browserid
@@ -41,11 +42,11 @@ Given that, setting up the environment for py.narc.ro should be as simple as:
 
 ```
 [user@host ~]$ git clone https://github.com/narc0tiq/flask-browserid.git --branch use-url_for
-[user@host ~]$ sudo pip install flask flask-misaka flask-sqlalchemy git+file://flask-browserid/
+[user@host ~]$ sudo pip install flask flask-mail flask-misaka flask-sqlalchemy git+file://flask-browserid/
 ```
 
 Messing around with [virtualenv](http://www.virtualenv.org/) is left as an
-exercise to the reader, but rest assured it has been tested and  works just
+exercise to the reader, but rest assured it has been tested and works just
 fine.
 
 

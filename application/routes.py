@@ -5,8 +5,9 @@ from functools import wraps
 from flask import request, session, g, redirect, url_for, abort, \
         render_template, flash, Response
 from flask.ext.login import login_required, current_user
+from flask_mail import Message
 
-from application import app, models, login_manager
+from application import app, models, login_manager, mail
 
 NavbarItem = namedtuple('NavbarItem', ['page_name', 'url', 'title'])
 LocalNav = lambda page, title: NavbarItem(page, url_for(page), title)
@@ -134,7 +135,18 @@ def edit_sidebar():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        return "Actually, this part isn't working yet. Sorry!"
+        extra_headers = {}
+        if 'return-addr' in request.form:
+            extra_headers['Reply-To'] = request.form['return-addr'];
+        with mail.record_messages() as outbox:
+            msg = Message(recipients=[app.config['WEBMASTER_EMAIL']],
+                          subject="Contact form message from %s" % (app.config['SERVER_NAME'] if app.config['SERVER_NAME'] is not None else 'the website'),
+                          body=request.form['content'],
+                          extra_headers=extra_headers)
+            mail.send(msg)
+            sent = outbox[0]
+        return render_template('completed.html', message="Your message has been sent.",
+                               debug=sent)
     article = models.Article.query.get('contact')
     return render_template('contact_form.html', article=article)
 

@@ -3,6 +3,7 @@ from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.browserid import BrowserID
 from flask.ext.misaka import Misaka
+from flask_mail import Mail
 from application import config, models
 
 app = Flask(__name__)
@@ -23,6 +24,8 @@ browser_id.init_app(app)
 
 Misaka(app, fenced_code=True, html=True, strikethrough=True, superscript=True,
        tables=True, toc=True, xhtml=False, intra_emphasis=False)
+
+mail = Mail(app)
 
 import application.hooks
 import application.routes
