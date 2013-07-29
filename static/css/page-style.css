@@ -139,11 +139,16 @@ a.redlink {
 
 #previewbox {
     position: relative;
+    clear: both;
     width: 96%;
     left: 1%;
     padding: 10px;
     border: 1px dashed #008;
     margin-bottom: 1em;
+}
+
+#previewbox h2 {
+    margin-top: 0px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -155,6 +160,16 @@ blockquote {
     margin: 4px 20px;
     border: 1px dashed #f8b;
     border-left: 3px solid #f8b;
+}
+
+#flashes {
+    float: right;
+    margin: 4px;
+    padding: 4px;
+    border: 1px solid #aaa;
+    background-color: #eee;
+    color: #404;
+    list-style-type: none;
 }
 
 #mail-form input[type=text], #mail-form textarea {

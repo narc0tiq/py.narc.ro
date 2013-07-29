@@ -27,6 +27,15 @@
     <div id="column-mask">
         <div id="column-wrapper">
             <div id="content">
+                {% with flashes = get_flashed_messages() %}
+                    {% if flashes %}
+                        <ul id="flashes" style="list-style: none inside url('{{ url_for('static', filename='img/Information_16x16.png') }}')">
+                        {% for f in flashes %}
+                            <li>{{ f }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
                 {% block content -%}
                     <p>This is an empty page.</p>
                 {%- endblock %}
@@ -61,7 +70,9 @@
     </div> <!-- id="column-mask" -->
     <div id="footer">
         {%- if g.start_time %}
-            <p>In completely unrelated news, it took {{ (g.datetime.utcnow() - g.start_time).total_seconds() * 1000 }} ms to display this page (more or less).</p>
+            <p>In completely unrelated news, it took {{ (g.datetime.utcnow() - g.start_time).total_seconds() * 1000 }} ms
+            to display this page (more or less).
+            Some icons courtesy of <a href="http://www.visualpharm.com/">VisualPharm -- Making ugly UI less ugly.</a></p>
         {%- endif %}
     </div>
 </body>

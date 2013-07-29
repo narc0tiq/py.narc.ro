@@ -57,11 +57,12 @@ def add_article():
     if request.method == 'POST':
         article = models.Article(request.form['title'], request.form['content'], request.form['slug'])
         if 'preview' in request.form:
+            flash('Remember this is just a preview: the article has not yet been saved.')
             return render_template('article_form.html', action=url_for('add_article'), preview=True, article=article)
         else:
             g.db.session.add(article)
             g.db.session.commit()
-            flash('New article has been recorded.')
+            flash('Article has been saved.')
             return redirect(url_for('article', slug=article.slug) or url_for('list'))
     else:
         return render_template('article_form.html', action=url_for('add_article'))
@@ -76,10 +77,11 @@ def edit_article(slug):
         article.title = request.form['title']
         article.content = request.form['content']
         if 'preview' in request.form:
+            flash('Remember this is just a preview: the article has not yet been saved.')
             return render_template('article_form.html', article=article, preview=True, action=url_for('edit_article', slug=slug))
         else:
             g.db.session.commit()
-            flash('Article edited.')
+            flash('Article updated.')
             return redirect(url_for('article', slug=article.slug))
     else:
         return render_template('article_form.html', article=article, action=url_for('edit_article', slug=slug))
@@ -93,6 +95,7 @@ def drop_article(slug):
         if 'confirm' in request.form:
             g.db.session.delete(article)
             g.db.session.commit()
+            flash("Article '%s' has been deleted." % article.title)
         return redirect(url_for('admin'))
     else:
         return render_template('confirm.html', action=url_for('drop_article', slug=slug),
@@ -145,8 +148,8 @@ def contact():
                           extra_headers=extra_headers)
             mail.send(msg)
             sent = outbox[0]
-        return render_template('completed.html', message="Your message has been sent.",
-                               debug=sent)
+        flash("Message has been sent.")
+        return redirect(url_for('article'))
     article = models.Article.query.get('contact')
     return render_template('contact_form.html', article=article)
 
@@ -172,6 +175,7 @@ def forget_download(fname):
         if 'confirm' in request.form:
             g.db.session.delete(hit)
             g.db.session.commit()
+            flash('Download counter for %s reset (was: %d).' % (hit.path, hit.hit_count))
         return redirect(url_for('admin'))
     else:
         return render_template('confirm.html', action=url_for('forget_download', fname=fname),
