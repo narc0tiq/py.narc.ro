@@ -14,6 +14,9 @@ app.config.from_envvar('NARCRO_CONFIG', silent=True)
 models.bind(app)
 db = models.db
 
+from application.session import SQLSession
+app.session_interface = SQLSession()
+
 login_manager = LoginManager()
 login_manager.user_loader(models.get_user_by_id)
 login_manager.init_app(app)

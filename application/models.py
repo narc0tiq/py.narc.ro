@@ -121,6 +121,19 @@ class DownloadHit(db.Model):
         return '<DownloadHit %r, %r hits between %r - %r>' % (self.path, self.hit_count, self.first_hit, self.last_hit)
 
 
+class Session(db.Model):
+    uuid = db.Column(db.String(32), primary_key=True)
+    data = db.Column(db.Binary)
+    last_access = db.Column(db.DateTime)
+
+    def __init__(self, uuid):
+        self.uuid = uuid
+        self.last_access = datetime.now()
+
+    def __repr__(self):
+        return '<Session %r>' % self.uuid
+
+
 def bind(app):
     db.init_app(app)
     return db
