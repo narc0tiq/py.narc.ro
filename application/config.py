@@ -8,7 +8,6 @@ LISTEN_INTERFACE = '127.0.0.1'
 
 DEBUG = True
 DEBUG_INTERACTIVE = False
-SECRET_KEY = 'Developer Secret (not so secret)'
 
 # Static downloads location. Don't leave out the trailing '/'!
 #DOWNLOADS_URL = 'http://example.org/downloads/'
