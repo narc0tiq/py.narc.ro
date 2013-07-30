@@ -47,7 +47,7 @@ def article(slug):
 @login_required
 def admin():
     articles = models.Article.query.all()
-    downloads = models.DownloadHit.query.all()
+    downloads = models.DownloadHit.query.order_by(models.DownloadHit.last_hit.desc()).all()
     return render_template('admin.html', articles=articles, downloads=downloads)
 
 @app.route('/admin/new', methods=['GET', 'POST'])
