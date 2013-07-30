@@ -10,6 +10,9 @@ DEBUG = True
 DEBUG_INTERACTIVE = False
 SECRET_KEY = 'Developer Secret (not so secret)'
 
+# Static downloads location. Don't leave out the trailing '/'!
+#DOWNLOADS_URL = 'http://example.org/downloads/'
+
 # The webmaster is the only person allowed to add/edit articles.
 # Note that anyone can view the admin area, though (by design)
 WEBMASTER_EMAIL = 'webmaster@narc.ro'

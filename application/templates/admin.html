@@ -20,17 +20,22 @@
     </ul>
     <p><a href="{{url_for('add_article') }}">New article</a></p>
     <h2>Downloads</h2>
-    <ul>
-    {% for d in downloads -%}
-        <li><strong>{{d.path}}</strong> hit <strong>{{d.hit_count}}</strong> times
-            between <strong>{{d.first_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
-            and <strong>{{d.last_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
-            {% if current_user.email == config.WEBMASTER_EMAIL -%}
-                <a class="redlink autohide" href="{{url_for('forget_download', fname=d.path)}}">[X]</a>
-            {%- endif %}
-        </li>
+    {% if config.DOWNLOADS_URL: %}
+        <ul>
+        {% for d in downloads -%}
+            <li><a href="{{config.DOWNLOADS_URL}}{{d.path}}">{{d.path}}</a>
+                hit <strong>{{d.hit_count}}</strong> times
+                between <strong>{{d.first_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                and <strong>{{d.last_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                {% if current_user.email == config.WEBMASTER_EMAIL -%}
+                    <a class="redlink autohide" href="{{url_for('forget_download', fname=d.path)}}">[X]</a>
+                {%- endif %}
+            </li>
+        {% else %}
+            <li><i>No downloads recorded yet...</i></li>
+        {% endfor %}
     {% else %}
-        <li><i>No downloads recorded yet...</i></li>
-    {% endfor %}
+        <p>Download tracking is disabled on this server. Set the config value DOWNLOADS_URL to enable them.</p>
+    {% endif %}
     </ul>
 {% endblock %}

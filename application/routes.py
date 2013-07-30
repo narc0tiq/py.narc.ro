@@ -155,14 +155,15 @@ def contact():
 
 @app.route('/download/<path:fname>')
 def download(fname):
+    if 'DOWNLOADS_URL' not in app.config:
+        abort(500)
     recorder = models.DownloadHit.query.get(fname)
     if recorder is None:
         recorder = models.DownloadHit(fname)
         g.db.session.add(recorder)
     recorder.record()
     g.db.session.commit()
-    # TODO: Redirect to configured static path of the download.
-    return Response('Recorded hit on %s' % fname, mimetype='text/plain')
+    return redirect(app.config['DOWNLOADS_URL'] + fname)
 
 @app.route('/admin/forget/<path:fname>', methods=['GET', 'POST'])
 @login_required
