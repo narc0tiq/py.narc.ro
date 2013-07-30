@@ -12,7 +12,8 @@ body {
     background-color: #ddd;
     color: #111;
 
-    font-family: 'PT Sans Caption', sans-serif;
+    font-family: 'DejaVu Sans', sans-serif;
+    font-size: 15px;
 }
 
 /* reminder: a:link -> a:visited -> a:hover -> a:active << must always be in this order! */
