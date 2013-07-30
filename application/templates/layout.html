@@ -55,7 +55,7 @@
                     {%- if current_user.is_authenticated() -%}
                         <li><b>{{current_user.email}}</b></li>
                         <li><a class="persona-button dark" id="browserid-logout"><span>Logout</span></a></li>
-                        <li>{{link_or_bold('admin', url_for('admin'), "Edit articles") }}</li>
+                        <li>{{link_or_bold('admin', url_for('admin'), "Administration") }}</li>
                         <li>{{link_or_bold('admin/sidebar', url_for('edit_sidebar'), "Edit the sidebar") }}</li>
                         {%- if current_user.email == config.WEBMASTER_EMAIL and article -%}
                             <li>{{link_or_bold('admin/edit', url_for('edit_article', slug=article.slug), "Edit this article") }}</li>
