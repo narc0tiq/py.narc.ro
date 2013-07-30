@@ -24,12 +24,14 @@
         <ul>
         {% for d in downloads -%}
             <li><a href="{{url_for('download', fname=d.path)}}">{{d.path}}</a>:
-                <strong>{{d.hit_count}}</strong> hits
-                between <strong>{{d.first_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
-                and <strong>{{d.last_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
                 {% if current_user.email == config.WEBMASTER_EMAIL -%}
                     <a class="redlink autohide" href="{{url_for('forget_download', fname=d.path)}}">[X]</a>
                 {%- endif %}
+                <div style="text-align: right">
+                    <strong>{{d.hit_count}}</strong> hits
+                    between <strong>{{d.first_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                    and <strong>{{d.last_hit.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                </div>
             </li>
         {% else %}
             <li><i>No downloads recorded yet...</i></li>
