@@ -6,6 +6,9 @@
 <head>
     <title>{{ '%s - ' % page_title if page_title }}Narc Dot Ro</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    {% if config.GOOGLE_VERIFICATION_META -%}
+        <meta name="google-site-verification" content="{{ config.GOOGLE_VERIFICATION_META }}">
+    {%- endif %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/page-style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/persona-buttons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/DejaVuSans.css') }}">
