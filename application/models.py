@@ -90,7 +90,7 @@ class SidebarLink(db.Model):
     page = db.Column(db.String(100), nullable=True)
 
     parent_id = db.Column(db.Integer, db.ForeignKey(Sidebar.id))
-    parent = db.relationship(Sidebar, backref=db.backref('links', lazy='static'))
+    parent = db.relationship(Sidebar, backref=db.backref('links', lazy='joined'))
 
     def __init__(self, url, label, page=None):
         self.url = url
